@@ -1,0 +1,284 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hindi Text Processing</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        label {
+            font-size: 18px;
+            color: #333;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            resize: vertical;
+        }
+
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        h2 {
+            color: #4CAF50;
+            margin-top: 30px;
+        }
+
+        p {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #555;
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-left: 5px solid #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Hindi Text Processing Application</h1>
+        
+        <form method="POST" action="/process">
+            <label for="hindi_text">Enter Hindi Text:</label><br>
+            <textarea id="hindi_text" name="hindi_text" rows="10" cols="50"></textarea><br><br>
+            <input type="submit" value="Process Text">
+        </form>
+
+        {% if output_text %}
+            <h2>Original Hindi Text:</h2>
+            <p>{{ input_text }}</p>
+            <p><strong>Word Count:</strong> {{ original_word_count }}</p>
+
+            <h2>Processed Hindi Text:</h2>
+            <p>{{ output_text }}</p>
+            <p><strong>Word Count:</strong> {{ processed_word_count }}</p>
+
+            <h2>Similarity Scores:</h2>
+            <p><strong>Cosine Similarity Score:</strong> {{ similarity_score }}</p>
+            <p><strong>Unigram Similarity:</strong> {{ unigram_similarity }}</p>
+            <p><strong>Bigram Similarity:</strong> {{ bigram_similarity }}</p>
+        {% endif %}
+    </div>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hindi Text Processing</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            background-color: white;
+            padding: 30px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-size: 1.2rem;
+            color: #555;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 15px;
+            font-size: 1rem;
+            border-radius: 8px;
+            border: 2px solid #ddd;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+        }
+
+        textarea:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+
+        input[type="submit"]:active {
+            transform: translateY(0);
+        }
+
+        h2 {
+            color: #4CAF50;
+            margin-top: 30px;
+            font-size: 1.8rem;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #555;
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-left: 5px solid #4CAF50;
+            border-radius: 4px;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        p:hover {
+            background-color: #e0f7e0;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .stats p {
+            flex: 1;
+            margin: 0 10px;
+            text-align: center;
+            padding: 10px;
+            background-color: #e8f5e9;
+            border-radius: 8px;
+            border-left: none;
+        }
+
+        .stats p strong {
+            display: block;
+            font-size: 1.2rem;
+            color: #4CAF50;
+        }
+
+        .similarity-scores {
+            margin-top: 20px;
+        }
+
+        .similarity-scores p {
+            background-color: #e3f2fd;
+            border-left-color: #2196f3;
+        }
+
+        .similarity-scores p:hover {
+            background-color: #bbdefb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Hindi Text Processing Application</h1>
+        
+        <form method="POST" action="/process">
+            <label for="hindi_text">Enter Hindi Text:</label>
+            <textarea id="hindi_text" name="hindi_text" rows="10" placeholder="Type or paste your Hindi text here..."></textarea>
+            <input type="submit" value="Process Text">
+        </form>
+
+        {% if output_text %}
+            <h2>Original Hindi Text:</h2>
+            <p>{{ input_text }}</p>
+
+            <div class="stats">
+                <p><strong>Word Count:</strong> {{ original_word_count }}</p>
+                <p><strong>Character Count:</strong> {{ original_char_count }}</p>
+            </div>
+
+            <h2>Processed Hindi Text:</h2>
+            <p>{{ output_text }}</p>
+
+            <div class="stats">
+                <p><strong>Word Count:</strong> {{ processed_word_count }}</p>
+                <p><strong>Character Count:</strong> {{ processed_char_count }}</p>
+            </div>
+
+            <div class="similarity-scores">
+                <h2>Similarity Scores:</h2>
+                <p><strong>Cosine Similarity Score:</strong> {{ similarity_score }}</p>
+                <p><strong>Unigram Similarity:</strong> {{ unigram_similarity }}</p>
+                <p><strong>Bigram Similarity:</strong> {{ bigram_similarity }}</p>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
